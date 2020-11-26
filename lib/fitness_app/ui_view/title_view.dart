@@ -27,7 +27,7 @@ class TitleView extends StatelessWidget {
                 0.0, 30 * (1.0 - animation.value), 0.0),
             child: Container(
               child: Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
+                padding: const EdgeInsets.only(left: 24, right: 24, top:30),
                 child: Row(
                   children: <Widget>[
                     Expanded(

@@ -1,15 +1,58 @@
 import 'package:best_flutter_ui_templates/app_theme.dart';
 import 'package:flutter/material.dart';
+import '../../common/http_util.dart';
+import 'dart:convert';
 
-class HelpScreen extends StatefulWidget {
+class PostDetail extends StatefulWidget {
+  final Map arguments;
+  PostDetail( {this.arguments,Key key }) : super(key: key);
+
   @override
-  _HelpScreenState createState() => _HelpScreenState();
+  _PostDetailState createState() => _PostDetailState();
 }
 
-class _HelpScreenState extends State<HelpScreen> {
+class _PostDetailState extends State<PostDetail> {
+  // String title = '';
+  
+  // ignore: non_constant_identifier_names
+  Map PostDetail = {
+    'id':'',
+    'title':'',
+    'summary':'',
+    'content':'',
+    'publish':'',
+    'publish_date':'',
+    'is_notice':'',
+    'related_posts':'',
+    'images':'',
+  };
+
   @override
   void initState() {
+    // print(widget.arguments);
+    wgetData();
     super.initState();
+  }
+
+
+  Future<void> wgetData() async {
+    Map<String, dynamic> params = Map();
+    params["post_id"] = widget.arguments['postId'];
+    var response = await HttpUtil.request('/api/tags/post-detail',
+        data: params, method: HttpUtil.GET);
+
+    var responseData = jsonDecode(response.toString());
+    // print(responseData);
+    if (responseData.containsKey('data')) {
+      responseData = responseData['data'][0];
+      print(responseData['id']);
+      PostDetail['title'] = responseData['title'];
+      PostDetail['content'] = responseData['content'];
+
+      setState(() {
+        PostDetail = PostDetail;
+      });
+    }
   }
 
   @override
@@ -32,7 +75,8 @@ class _HelpScreenState extends State<HelpScreen> {
               Container(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  'How can we help you? 123',
+                  PostDetail['title'].isNotEmpty?
+                  PostDetail['title']:'',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -41,8 +85,9 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16),
-                child: const Text(
-                  'It looks like you are experiencing problems\nwith our sign up process. We are here to\nhelp so please get in touch with us',
+                child: Text(
+                  PostDetail['content'].isNotEmpty?
+                  PostDetail['content']:'',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,

@@ -6,7 +6,7 @@ import 'package:best_flutter_ui_templates/help_screen.dart';
 import 'package:best_flutter_ui_templates/home_screen.dart';
 import 'package:best_flutter_ui_templates/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:best_flutter_ui_templates/fitness_app/fitness_app_home_screen.dart';
+import 'package:best_flutter_ui_templates/fitness_app/home_screen.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   void initState() {
     drawerIndex = DrawerIndex.HOME;
     // screenView = const MyHomePage();
-    screenView = FitnessAppHomeScreen();
+    screenView = HomeScreen();
     super.initState();
   }
 

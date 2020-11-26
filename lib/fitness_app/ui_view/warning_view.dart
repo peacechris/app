@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../fintness_app_theme.dart';
 
-class GlassView extends StatelessWidget {
+class WarningView extends StatelessWidget {
   final AnimationController animationController;
   final Animation animation;
 
-  const GlassView({Key key, this.animationController, this.animation})
+  const WarningView({Key key, this.animationController, this.animation})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class GlassView extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 24, right: 24, top: 0, bottom: 24),
+                      left: 24, right: 24, top: 0, bottom: 0),
                   child: Stack(
                     overflow: Overflow.visible,
                     children: <Widget>[
@@ -44,35 +44,39 @@ class GlassView extends StatelessWidget {
                             //       blurRadius: 10.0),
                             // ],
                           ),
-                          child: Column(
+                          child: Row(
                             children: <Widget>[
-                              Padding(
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 68, bottom: 12, right: 16, top: 12),
+                                    left:20, bottom: 10, right: 16, top: 10),
                                 child: Text(
-                                  'Prepare your stomach for lunch with one or two glass of water',
+                                  '《限聚令》安排   --2020-06-14《限聚令》安排   --2020-06-14《限聚令》安排   --2020-06-14',
                                   textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14,
+                                    fontSize: 15,
                                     letterSpacing: 0.0,
                                     color: FitnessAppTheme.nearlyDarkBlue
                                         .withOpacity(0.6),
                                   ),
                                 ),
-                              ),
+                              ),)
                             ],
                           ),
                         ),
                       ),
                       Positioned(
-                        top: -12,
+                        top: 0,
                         left: 0,
                         child: SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: Image.asset("assets/fitness_app/glass.png"),
+                          width: 35,
+                          height: 35,
+                          child: Image.asset("assets/fitness_app/warning_bell.png"),
                         ),
                       )
                     ],

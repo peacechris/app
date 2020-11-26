@@ -1,21 +1,21 @@
-import 'package:best_flutter_ui_templates/fitness_app/ui_view/glass_view.dart';
+import 'package:best_flutter_ui_templates/fitness_app/ui_view/warning_view.dart';
 import 'package:best_flutter_ui_templates/fitness_app/ui_view/title_view.dart';
 import 'package:best_flutter_ui_templates/fitness_app/fintness_app_theme.dart';
 // import 'package:best_flutter_ui_templates/fitness_app/my_diary/meals_list_view.dart';
-import 'package:best_flutter_ui_templates/fitness_app/my_diary/home_tags_list.dart';
+import 'package:best_flutter_ui_templates/fitness_app/my_diary/home_tags_posts.dart';
 import 'package:flutter/material.dart';
 import '../../common/http_util.dart';
 import 'dart:convert';
 
-class MyDiaryScreen extends StatefulWidget {
-  const MyDiaryScreen({Key key, this.animationController}) : super(key: key);
+class HomeIndexScreen extends StatefulWidget {
+  const HomeIndexScreen({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _MyDiaryScreenState createState() => _MyDiaryScreenState();
+  _HomeIndexScreenState createState() => _HomeIndexScreenState();
 }
 
-class _MyDiaryScreenState extends State<MyDiaryScreen>
+class _HomeIndexScreenState extends State<HomeIndexScreen>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -59,6 +59,18 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
   Future<void> addAllListData() async {
     const int count = 9;
+
+    listViews.add(
+      WarningView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 8, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController),
+    );
+
+
     Map<String, dynamic> params = Map();
     params["page"] = 1;
     var response = await HttpUtil.request('/api/tags/home',
@@ -84,9 +96,9 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
             ),
           );
           listViews.add(
-            HomeTagsList(
+            HomeTagsPosts(
               tagSequence: tagSequence,
-              tagsListData: posts,
+              tagsPostsData: posts,
               mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
                   CurvedAnimation(
                       parent: widget.animationController,
@@ -96,7 +108,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
             ),
           );
 
-          
           tagSequence++;
         });
       }
