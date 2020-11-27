@@ -4,6 +4,8 @@ import '../../common/http_util.dart';
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart';
 import '../../common/global.dart';
+import 'package:shimmer/shimmer.dart';
+// import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class PostDetail extends StatefulWidget {
   final Map arguments;
@@ -29,7 +31,14 @@ class _PostDetailState extends State<PostDetail> {
     'related_posts': '',
   };
 
-  Widget images = Image.asset('assets/images/helpImage.png');
+  Widget images = Shimmer.fromColors(
+                        baseColor: Colors.grey[300],
+                        highlightColor: Colors.grey[100],
+                        child: Container(
+                          height: 280,
+                          width: 500,
+                          color: Colors.white,
+                        ));
 
   @override
   void initState() {
@@ -52,13 +61,13 @@ class _PostDetailState extends State<PostDetail> {
       PostDetail['title'] = responseData['title'];
       PostDetail['content'] = responseData['content'];
 
-      if(responseData.containsKey('images')){
+      if (responseData.containsKey('images')) {
         var images_urls = responseData['images'][0];
         setState(() {
-          images = Image.network(Global.API_PREFIX+images_urls);
+          images = Image.network(Global.API_PREFIX + images_urls);
         });
       }
-      
+
       setState(() {
         PostDetail = PostDetail;
       });
@@ -76,32 +85,45 @@ class _PostDetailState extends State<PostDetail> {
           body: ListView(
             children: <Widget>[
               Container(
-                constraints: BoxConstraints(
-                  // minWidth: 180,
-                  minHeight: 250,
-                ),
                 child: images,
               ),
               Container(
-                padding: const EdgeInsets.only(top: 8, left:20,right: 20),
-                child: Text(
-                  PostDetail['title'].isNotEmpty ? PostDetail['title'] : '',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                padding: const EdgeInsets.only(top: 8, left: 20, right: 20),
+                child: PostDetail['title'].isNotEmpty
+                    ? Text(
+                        PostDetail['title'].isNotEmpty
+                            ? PostDetail['title']
+                            : '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Shimmer.fromColors(
+                        baseColor: Colors.grey[300],
+                        highlightColor: Colors.grey[100],
+                        child: Container(
+                          height: 30,
+                          width: 500,
+                          color: Colors.white,
+                        )),
               ),
               Container(
-                padding: const EdgeInsets.only(top: 8, left:18,right: 18),
+                padding: const EdgeInsets.only(top: 8, left: 18, right: 18),
                 child: PostDetail['content'].isNotEmpty
-                      ? Html(
-                          data: PostDetail['content'],
-                        )
-                      : Text(''),
+                    ? Html(
+                        data: PostDetail['content'],
+                      )
+                    : Shimmer.fromColors(
+                        baseColor: Colors.grey[300],
+                        highlightColor: Colors.grey[100],
+                        child: Container(
+                          height: 600,
+                          width: 500,
+                          color: Colors.white,
+                        )),
               ),
-              
             ],
           ),
         ),
