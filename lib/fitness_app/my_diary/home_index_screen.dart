@@ -112,6 +112,10 @@ class _HomeIndexScreenState extends State<HomeIndexScreen>
         });
       }
     }
+
+    setState(() {
+      listViews = listViews;
+    });
   }
 
   // ignore: missing_return
@@ -147,7 +151,6 @@ class _HomeIndexScreenState extends State<HomeIndexScreen>
           return Center(
             child: CircularProgressIndicator(),
           );
-          // return const SizedBox();
         } else {
           return ListView.builder(
             controller: scrollController,

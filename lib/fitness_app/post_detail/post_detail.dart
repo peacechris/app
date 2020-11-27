@@ -2,10 +2,12 @@ import 'package:best_flutter_ui_templates/app_theme.dart';
 import 'package:flutter/material.dart';
 import '../../common/http_util.dart';
 import 'dart:convert';
+import 'package:flutter_html/flutter_html.dart';
+import '../../common/global.dart';
 
 class PostDetail extends StatefulWidget {
   final Map arguments;
-  PostDetail( {this.arguments,Key key }) : super(key: key);
+  PostDetail({this.arguments, Key key}) : super(key: key);
 
   @override
   _PostDetailState createState() => _PostDetailState();
@@ -13,19 +15,21 @@ class PostDetail extends StatefulWidget {
 
 class _PostDetailState extends State<PostDetail> {
   // String title = '';
-  
+
   // ignore: non_constant_identifier_names
   Map PostDetail = {
-    'id':'',
-    'title':'',
-    'summary':'',
-    'content':'',
-    'publish':'',
-    'publish_date':'',
-    'is_notice':'',
-    'related_posts':'',
-    'images':'',
+    'id': '',
+    'images': [],
+    'title': '',
+    'summary': '',
+    'content': '',
+    'publish': '',
+    'publish_date': '',
+    'is_notice': '',
+    'related_posts': '',
   };
+
+  Widget images = Image.asset('assets/images/helpImage.png');
 
   @override
   void initState() {
@@ -33,7 +37,6 @@ class _PostDetailState extends State<PostDetail> {
     wgetData();
     super.initState();
   }
-
 
   Future<void> wgetData() async {
     Map<String, dynamic> params = Map();
@@ -49,6 +52,13 @@ class _PostDetailState extends State<PostDetail> {
       PostDetail['title'] = responseData['title'];
       PostDetail['content'] = responseData['content'];
 
+      if(responseData.containsKey('images')){
+        var images_urls = responseData['images'][0];
+        setState(() {
+          images = Image.network(Global.API_PREFIX+images_urls);
+        });
+      }
+      
       setState(() {
         PostDetail = PostDetail;
       });
@@ -63,20 +73,20 @@ class _PostDetailState extends State<PostDetail> {
         top: false,
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
-          body: Column(
+          body: ListView(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
-                    left: 16,
-                    right: 16),
-                child: Image.asset('assets/images/helpImage.png'),
+                constraints: BoxConstraints(
+                  // minWidth: 180,
+                  minHeight: 250,
+                ),
+                child: images,
               ),
               Container(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: 8, left:20,right: 20),
                 child: Text(
-                  PostDetail['title'].isNotEmpty?
-                  PostDetail['title']:'',
+                  PostDetail['title'].isNotEmpty ? PostDetail['title'] : '',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -84,56 +94,14 @@ class _PostDetailState extends State<PostDetail> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text(
-                  PostDetail['content'].isNotEmpty?
-                  PostDetail['content']:'',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
+                padding: const EdgeInsets.only(top: 8, left:18,right: 18),
+                child: PostDetail['content'].isNotEmpty
+                      ? Html(
+                          data: PostDetail['content'],
+                        )
+                      : Text(''),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Container(
-                      width: 140,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(4.0)),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.6),
-                              offset: const Offset(4, 4),
-                              blurRadius: 8.0),
-                        ],
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {},
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                'Chat with Us',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              
             ],
           ),
         ),
